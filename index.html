@@ -1,0 +1,163 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Dobble</title>	
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	
+	<style>
+		.girado{
+			-webkit-transform: rotate(90deg);
+			transform: rotate(90deg);
+		}
+		body{
+			margin:0;
+			padding:0;
+			overflow:hidden;
+		}
+		.contenedor{
+			position: absolute;
+			padding:0;
+			border: none;
+			top:0:
+			left:0;
+			margin:0;
+			width:100vw;
+			height:100vh;
+			text-align: center;
+			background-color:rgb(249,247,248);
+			z-index:1;
+		}
+		
+		.carta{
+			position:relative;
+			float:left;
+			width:50vw;
+			height:100vh;
+			background-size:contain;
+			background-repeat:no-repeat;
+			background-position:center center;
+		}
+		#carta1{
+			background-image:url('./cards/01.jpg');
+		}
+		#carta2{
+			background-image:url('./cards/02.jpg');
+		}
+		
+		#pausa{
+			display:none;
+			z-index:2;
+		}
+		
+		#cargando{
+			background-image: url('loader.gif');
+			background-repeat: no-repeat;
+			background-position: center center;
+			background-size: auto;
+			z-index:3;
+		}
+		
+		.boton{
+			background: #3498db;
+			background-image: -webkit-linear-gradient(top, #3498db, #2980b9);
+			background-image: -moz-linear-gradient(top, #3498db, #2980b9);
+			background-image: -ms-linear-gradient(top, #3498db, #2980b9);
+			background-image: -o-linear-gradient(top, #3498db, #2980b9);
+			background-image: linear-gradient(to bottom, #3498db, #2980b9);
+			box-sizing: border-box;
+			margin-left:10vw;
+			margin-right:10vw;
+			width: 80vw;
+			height: 10vh;
+			margin-top: calc(80vh / 3);
+			font-size: 3vh;
+			padding-top: 3vh;
+			border-radius: 5vh;
+			cursor: pointer;
+			font-family: sans-serif;
+			box-shadow: 1vh 2vh 6vh rgba(0,0,0,0.2);
+			color: #fff;
+			text-transform: uppercase;
+		}
+		
+		.boton:hover {
+			background: #3cb0fd;
+			background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
+			background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);
+			background-image: -ms-linear-gradient(top, #3cb0fd, #3498db);
+			background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
+			background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
+			text-decoration: none;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="contenedor" id="tablero" onclick="mostrarpausa();">
+		<div class="carta" id="carta1"></div>
+		<div class="carta" id="carta2"></div>
+	</div>
+	<div class="contenedor" id="pausa">
+		<div class="boton" onclick="siguiente(0)">Comprobar</div>
+		<div class="boton" onclick="siguiente(1)">Siguiente ></div>
+	</div>
+	<div class="contenedor" id="cargando"></div>
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script>
+		inicializar();
+		window.onresize = function(event){establecermedidas();};
+		
+		function inicializar(){
+			sortearimagenes();
+			establecermedidas();
+			setTimeout(function(){$("#cargando").css("display","none");},3000);
+			$("#cargando").css("display","none");
+		}
+		
+		function establecermedidas(){
+			if ($(".contenedor").width()>=$(".contenedor").height()){
+				$(".carta").width("50vw");
+				$(".carta").height("100vh");
+				$(".carta").removeClass("girado");
+			}else{
+				$(".carta").width("100vw");
+				$(".carta").height("50vh");
+				$(".carta").addClass("girado");
+			}
+		}
+		
+		function mostrarpausa(){
+			$("#pausa").css("display","block");
+		}
+		
+		function siguiente(cambiar){
+			if (cambiar===1){
+				sortearimagenes();
+			}
+			$("#pausa").css("display","none");
+		}
+		
+		function sortearimagenes(){
+			var n1 = Math.floor(Math.random()*55);
+			var n2 = n1;
+			while (n2===n1){
+				n2 = Math.floor(Math.random()*55);
+			}
+			$("#carta1").css("background-image", "url('./cards/" + num2str(n1,2) + ".jpg')");
+			$("#carta2").css("background-image", "url('./cards/" + num2str(n2,2) + ".jpg')");
+		}
+		
+		function num2str(number,minlength){
+			var s = number.toString();
+			while (s.length<minlength){
+				s = "0"+s;
+			}
+			return s;
+		}
+		
+	</script>
+</body>
+
+</html>
